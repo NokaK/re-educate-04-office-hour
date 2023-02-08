@@ -1,0 +1,13 @@
+.title {
+  font-size: 40px;
+  color: blue;
+  background-color: yellow;
+}
+.weather-icon {
+  height: 100px;
+}
+
+#users span {
+  margin: 0 10px;
+  border: 1px solid green;
+}

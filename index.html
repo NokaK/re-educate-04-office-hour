@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="weather">
+
+    </div>
+
+
+    <ul id="users"></ul>
+
+
+
+    <script>
+
+        const body = document.getElementsByTagName('body')[0]
+
+        const persons = [{
+            name: 'ana',
+            salary: 800,
+            age: 23
+        }, {
+            name: 'giorgi',
+            salary: 1800,
+            age: 30
+        }, {
+            name: 'eka',
+            salary: 500,
+            age: 20
+        }, {
+            name: 'lasha',
+            salary: 1000,
+            age: 25
+        },]
+
+
+        // მასივის მიხედვით დინამიური ლისტების აწყობა
+
+        const users = document.getElementById('users')
+
+        for (let index = 0; index < persons.length; index++) {
+            const element = persons[index];
+
+            const li = document.createElement('li')
+            const salary = document.createElement('span')
+            const age = document.createElement('span')
+            const name = document.createElement('span')
+
+            salary.textContent = `salary: ${element.salary}`
+            age.textContent = `age: ${element.age}`
+            name.textContent = `name: ${element.name}`
+
+            li.appendChild(salary)
+            li.appendChild(age)
+            li.appendChild(name)
+
+            users.appendChild(li)
+
+
+        }
+
+
+
+
+        //მასივში კონკრეტული პიროვნების მოძებნა
+        const findGiorgi = persons.find(item => item.name === 'giorgi')
+
+
+        //სორტირებე
+        const numbers = [4, 6, 90, 2, 3]
+        const sortBySalary = numbers.sort((a, b) => b - a)
+
+
+        // salary ის მნიშვნელობის გაზრდა
+        const increaseSalary = (array) => {
+            const increase = array.map(item => {
+                return {
+                    ...item,
+                    salary: item.salary * 2
+                }
+            })
+            return increase
+
+        }
+
+
+        increaseSalary(persons)
+
+
+        // გაფილტვრა  Salary ის მნიშვნელობის მიხედვით
+        const filterBySalary = (array) => {
+            const salary = array.filter(item => item.salary >= 800)
+
+            return salary
+
+        }
+
+        filterBySalary(persons)
+
+
+
+
+        //მასივი salary ის ჯამის დათვლა
+
+        const calcSalary = (array) => {
+            let sum = 0
+            for (let index = 0; index < array.length; index++) {
+                const element = array[index];
+                sum = sum + element.salary
+
+            }
+            return sum
+
+            // const reduceSum = array.reduce((sum, element) => {
+            //     return sum + element.salary
+            // }, 0)
+            // return reduceSum
+        }
+
+
+        //ჯამის ჩვენება html ში
+
+        const sum = document.createElement('p')
+        sum.textContent = calcSalary(persons)
+        body.appendChild(sum)
+
+
+
+
+        //2 წამის დაყოვნების შემდგომ div ის შექმნა
+        setTimeout(() => {
+            const content = document.createElement('div')
+            content.textContent = 'this is set interval'
+            body.appendChild(content)
+        }, 2000)
+
+
+
+
+
+        // ამინდის api
+
+        const getWeather = async () => {
+
+            const weather = document.getElementById('weather')
+            try {
+                const lat = 48.8566;
+                const lon = 2.3522;
+                const key = ''
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`)
+                const data = await response.json()
+
+                if (response.status === 401) {
+                    const errorText = document.createElement('p')
+                    errorText.textContent = response.statusText
+                    weather.appendChild(errorText)
+                } else {
+                    const wrapper = document.createElement('div')
+
+                    const h1 = document.createElement('h1')
+                    h1.textContent = `${data.main.temp} ${data.weather[0].description} `
+                    h1.classList.add('title')
+
+                    const img = document.createElement('img')
+                    img.setAttribute('src', `http://openweathermap.org/img/w/${data.weather[0].icon}.png`)
+                    img.classList.add('weather-icon')
+
+                    wrapper.appendChild(img)
+                    wrapper.appendChild(h1)
+                    weather.appendChild(wrapper)
+                }
+
+
+            }
+            catch (e) {
+                console.log(e)
+            }
+
+
+        }
+        getWeather()
+
+    </script>
+
+</body>
+
+</html>
